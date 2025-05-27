@@ -1,7 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"github.com/luism2302/pokedexcli/internal/input"
+)
 
 func main() {
-	fmt.Println("Hello, World!")
+	input.Repl()
 }
