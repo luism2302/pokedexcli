@@ -7,12 +7,13 @@ import (
 	"strings"
 
 	"github.com/luism2302/pokedexcli/internal/pokeapi"
+	"github.com/luism2302/pokedexcli/internal/pokecache"
 )
 
 type cliCommand struct {
 	name        string
 	description string
-	callback    func(s *pokeapi.State) error
+	callback    func(s *pokeapi.State, c *pokecache.Cache) error
 }
 
 func getSupportedCommands() map[string]cliCommand {
@@ -25,13 +26,13 @@ func getSupportedCommands() map[string]cliCommand {
 	return supportedCommands
 }
 
-func commandExit(s *pokeapi.State) error {
+func commandExit(s *pokeapi.State, c *pokecache.Cache) error {
 	fmt.Println("Closing the Pokedex... Goodbye!")
 	os.Exit(0)
 	return nil
 }
 
-func commandHelp(s *pokeapi.State) error {
+func commandHelp(s *pokeapi.State, c *pokecache.Cache) error {
 	fmt.Println("Welcome to the Pokedex!")
 	fmt.Println("Usage:\n")
 	for _, command := range getSupportedCommands() {
@@ -40,8 +41,8 @@ func commandHelp(s *pokeapi.State) error {
 	return nil
 }
 
-func commandMap(s *pokeapi.State) error {
-	locations, err := pokeapi.GetLocationAreas(s.CurrentUrl)
+func commandMap(s *pokeapi.State, c *pokecache.Cache) error {
+	locations, err := pokeapi.GetLocationAreas(s.CurrentUrl, c)
 	if err != nil {
 		return err
 	}
@@ -53,12 +54,12 @@ func commandMap(s *pokeapi.State) error {
 	return nil
 }
 
-func commandMapB(s *pokeapi.State) error {
+func commandMapB(s *pokeapi.State, c *pokecache.Cache) error {
 	if s.PreviousUrl == "" {
 		fmt.Println("You are on the first page")
 		return nil
 	}
-	locations, err := pokeapi.GetLocationAreas(s.PreviousUrl)
+	locations, err := pokeapi.GetLocationAreas(s.PreviousUrl, c)
 	if err != nil {
 		return err
 	}
@@ -85,7 +86,7 @@ func CleanInput(text string) []string {
 	return trimmed
 }
 
-func Repl(s *pokeapi.State) {
+func Repl(s *pokeapi.State, c *pokecache.Cache) {
 	scanner := bufio.NewScanner(os.Stdin)
 	flag := true
 
@@ -103,6 +104,6 @@ func Repl(s *pokeapi.State) {
 			fmt.Println("Unkown command")
 			continue
 		}
-		supportedCommands[words[0]].callback(s)
+		supportedCommands[words[0]].callback(s, c)
 	}
 }
