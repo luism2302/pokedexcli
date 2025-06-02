@@ -11,5 +11,6 @@ import (
 func main() {
 	currentState := pokeapi.State{CurrentUrl: "https://pokeapi.co/api/v2/location-area/", PreviousUrl: ""}
 	cache := pokecache.NewCache(5 * time.Second)
-	input.Repl(&currentState, cache)
+	pokedex := map[string]pokeapi.Pokemon{}
+	input.Repl(&currentState, cache, pokedex)
 }
