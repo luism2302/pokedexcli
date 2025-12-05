@@ -13,11 +13,22 @@ func main() {
 	for {
 		fmt.Print("Pokedex > ")
 		hasInput := scanner.Scan()
-		if hasInput {
-			userInput := scanner.Text()
-			command := text.CleanInput(userInput)[0]
-			fmt.Printf("Your command was: %s\n", command)
-		}
-	}
 
+		if !hasInput {
+			continue
+		}
+
+		cleanInput := text.CleanInput(scanner.Text())[0]
+		supportedCommands := getCommands()
+
+		if command, ok := supportedCommands[cleanInput]; ok {
+			err := command.callback()
+			if err != nil {
+				fmt.Println(err)
+			}
+		} else {
+			fmt.Println("Unknown command")
+		}
+
+	}
 }

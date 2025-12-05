@@ -20,7 +20,7 @@ func TestCleanInput(t *testing.T) {
 	}
 
 	for _, tc := range tests {
-		got := cleanInput(tc.input)
+		got := CleanInput(tc.input)
 		if !reflect.DeepEqual(got, tc.want) {
 			t.Fatalf("%s: expected: %v, got: %v", tc.name, tc.want, got)
 		}
