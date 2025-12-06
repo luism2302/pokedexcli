@@ -14,6 +14,7 @@ func main() {
 	scanner := bufio.NewScanner(os.Stdin)
 	config := &pokeapi.Config{
 		PokeClient: pokeapi.NewClient(10*time.Second, 5*time.Second),
+		Pokedex:    make(map[string]pokeapi.Pokemon),
 		Previous:   "",
 		Next:       "https://pokeapi.co/api/v2/location-area/",
 	}
