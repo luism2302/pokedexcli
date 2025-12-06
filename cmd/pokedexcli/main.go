@@ -7,14 +7,17 @@ import (
 	"github.com/luism2302/pokedexcli/internal/pokeapi"
 	"github.com/luism2302/pokedexcli/internal/text"
 	"os"
+	"time"
 )
 
 func main() {
 	scanner := bufio.NewScanner(os.Stdin)
 	config := &pokeapi.Config{
-		Previous: "",
-		Next:     "https://pokeapi.co/api/v2/location-area/",
+		PokeClient: pokeapi.NewClient(10*time.Second, 5*time.Second),
+		Previous:   "",
+		Next:       "https://pokeapi.co/api/v2/location-area/",
 	}
+
 	for {
 		fmt.Print("Pokedex > ")
 		hasInput := scanner.Scan()
@@ -22,12 +25,16 @@ func main() {
 		if !hasInput {
 			continue
 		}
-
-		cleanInput := text.CleanInput(scanner.Text())[0]
+		cleanInput := text.CleanInput(scanner.Text())
+		command := cleanInput[0]
+		parameters := []string{}
+		if len(cleanInput) > 1 {
+			parameters = cleanInput[1:]
+		}
 		supportedCommands := commands.GetCommands()
 
-		if command, ok := supportedCommands[cleanInput]; ok {
-			err := command.Callback(config)
+		if command, ok := supportedCommands[command]; ok {
+			err := command.Callback(config, parameters...)
 			if err != nil {
 				fmt.Println(err)
 			}

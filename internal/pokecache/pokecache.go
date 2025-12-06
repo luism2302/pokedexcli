@@ -38,11 +38,11 @@ func (cache *Cache) Add(key string, val []byte) {
 
 func (cache *Cache) Get(key string) ([]byte, bool) {
 	cache.mux.RLock()
+	defer cache.mux.RUnlock()
 	if _, ok := cache.Cached[key]; !ok {
 		return nil, false
 	}
 	value := cache.Cached[key].val
-	cache.mux.RUnlock()
 	return value, true
 }
 
