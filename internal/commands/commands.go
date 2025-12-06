@@ -1,38 +1,38 @@
-package main
+package commands
 
 import (
 	"fmt"
-	"github.com/luism2302/pokedexcli/pokeapi"
+	"github.com/luism2302/pokedexcli/internal/pokeapi"
 	"os"
 )
 
-type cliCommand struct {
-	name        string
-	description string
-	callback    func(*pokeapi.Config) error
+type CliCommand struct {
+	Name        string
+	Description string
+	Callback    func(*pokeapi.Config) error
 }
 
-func getCommands() map[string]cliCommand {
-	supportedCommands := map[string]cliCommand{
+func GetCommands() map[string]CliCommand {
+	supportedCommands := map[string]CliCommand{
 		"exit": {
-			name:        "exit",
-			description: "Exit the Pokedex",
-			callback:    commandExit,
+			Name:        "exit",
+			Description: "Exit the Pokedex",
+			Callback:    commandExit,
 		},
 		"help": {
-			name:        "help",
-			description: "Displays a help message",
-			callback:    commandHelp,
+			Name:        "help",
+			Description: "Displays a help message",
+			Callback:    commandHelp,
 		},
 		"map": {
-			name:        "map",
-			description: "Displays the next 20 location-areas",
-			callback:    commandMap,
+			Name:        "map",
+			Description: "Displays the next 20 location-areas",
+			Callback:    commandMap,
 		},
 		"mapb": {
-			name:        "mapb",
-			description: "Displays the previous 20 location-areas",
-			callback:    commandMapb,
+			Name:        "mapb",
+			Description: "Displays the previous 20 location-areas",
+			Callback:    commandMapb,
 		},
 	}
 	return supportedCommands
@@ -48,8 +48,8 @@ func commandHelp(config *pokeapi.Config) error {
 	fmt.Println("Welcome to the Pokedex!")
 	fmt.Println("Usage:")
 	fmt.Print("\n")
-	for _, command := range getCommands() {
-		fmt.Printf("%s: %s\n", command.name, command.description)
+	for _, command := range GetCommands() {
+		fmt.Printf("%s: %s\n", command.Name, command.Description)
 	}
 	return nil
 }
